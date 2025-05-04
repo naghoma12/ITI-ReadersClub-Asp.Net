@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ReadersClubCore.Models.Channel>
+
+@{
+    /*Start Channel Navbar section*/
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-gradient mb-0"> قائمة القنوات</h2>
+    <a asp-action="AddChannel" class="btn btn-outline-success">
+        <i class="fas fa-plus-circle p-2"></i> إضافة قناه جديده
+    </a>
+</div>
+
+<div class="row g-4" dir="rtl">
+    @foreach (var channel in Model)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-light-subtle">
+
+                @if (!string.IsNullOrEmpty(channel.Image))
+                {
+                    <div class="ratio ratio-16x9">
+                        <img src="~/Uploads/ChannelsImages/@channel.Image" class="img-fluid rounded-top" alt="@channel.Name" style="object-fit: cover;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="ratio ratio-16x9">
+                        <img src="~/Uploads/ChannelsImages/welcome-image.jpeg" class="img-fluid rounded-top" alt="@channel.Name" style="object-fit: cover;" />
+                    </div>
+                    
+                }
+                <div class="card-body d-flex flex-column px-4 py-3">
+                    <h5 class="fw-bold text-dark mb-2 text-center">@channel.Name Channel</h5>
+                    <p class="text-muted small mb-2 text-center">
+                        @channel.Description.Substring(0, Math.Min(channel.Description.Length, 80))...
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Details" asp-route-id="@channel.Id" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="bi bi-eye-fill"></i> عرض
+                        </a>
+                        <a asp-action="EditChannel" asp-route-id="@channel.Id" class="btn btn-outline-warning btn-sm w-100">
+                            <i class="bi bi-pencil"></i> تعديل
+                        </a>
+                        <a asp-action="DeleteChannel" asp-route-id="@channel.Id" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-trash"></i> حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

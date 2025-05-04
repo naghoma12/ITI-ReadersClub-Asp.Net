@@ -1,0 +1,35 @@
+﻿@{
+    /*Start Channel Navbar section*/
+}
+<nav class="navbar navbar-expand-lg text-bg-dark ">
+    <div class="container-fluid">
+        <button class="navbar-toggler text-bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse align-items-center justify-content-between" id="navbarSupportedContent">
+
+            <div class="nav-item">
+                <span aria-current="page">عدد القنوات :</span>
+                <span class="badge text-bg-info fs-5">
+                    @ViewData["NumberOfChannels"]
+                </span>
+            </div>
+            <div class="nav-item">
+                <a class="btn btn-info text-dark" asp-controller="Channel" asp-action="AddChannel">أضافة قناة <span id="add-channel" class="bg-light rounded-circle">+</span></a>
+            </div>
+
+            @{
+                /*Search Part*/
+            }
+            <form class="d-flex gap-2 w-50 flex-row-reverse" role="search">
+                <input class="form-control me-2" type="search" placeholder="ادخل اسم القناة للبحث" aria-label="Search">
+                <button class="btn btn-outline-success w-50" type="submit">ابحث عن القناة</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+@{
+            /*End Channel Navbar section*/
+}
+<h1 class="alert alert-danger text-center">لا يوجد اي قنوات حاليا</h1>

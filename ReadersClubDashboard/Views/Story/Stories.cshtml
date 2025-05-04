@@ -1,0 +1,84 @@
+﻿@model IEnumerable<StoryVM>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-gradient mb-0">📖 قائمة الروايات</h2>
+    <a asp-action="AddStory" class="btn btn-outline-success">
+        <i class="fas fa-plus-circle p-2"></i> إضافة روايه جديده
+    </a>
+</div>
+
+<div class="row g-4" dir="rtl">
+    @foreach (var story in Model)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-light-subtle">
+
+                @if (!string.IsNullOrEmpty(story.Story.Cover))
+                {
+                    <div class="ratio ratio-16x9">
+                        <img src="~/Uploads/Covers/@story.Story.Cover" class="img-fluid rounded-top" alt="@story.Story.Title" style="object-fit: cover;" />
+                    </div>
+                }
+
+                <div class="card-body d-flex flex-column px-4 py-3">
+                    <h5 class="fw-bold text-dark mb-2">@story.Story.Title</h5>
+                    <div class="mb-2">
+                        @{
+                            var rating = story.AverageRating; 
+                            for (double i = 1; i <= 5; i++)
+                            {
+                                if (i <= rating)
+                                {
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star text-muted"></i>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <p class="text-muted small mb-2">
+                        @story.Story.Summary?.Substring(0, Math.Min(story.Story.Summary.Length, 80))...
+                    </p>
+
+                    <span class="badge bg-secondary mb-3 align-self-start rounded-pill px-3">
+                        التصنيف: @story.Story.Category?.Name
+                    </span>
+
+                    <div class="d-flex justify-content-between text-center mb-4">
+                        <div class="flex-fill bg-white rounded-3 py-2 mx-1 shadow-sm">
+                            <i class="bi bi-eye text-primary d-block fs-5"></i>
+                            <small class="text-muted">المشاهدات</small>
+                            <div class="fw-bold">@story.Story.ViewsCount</div>
+                        </div>
+                        <div class="flex-fill bg-white rounded-3 py-2 mx-1 shadow-sm">
+                            <i class="bi bi-hand-thumbs-up-fill text-success d-block fs-5"></i>
+                            <small class="text-muted">إعجاب</small>
+                            <div class="fw-bold">@story.Story.LikesCount</div>
+                        </div>
+                        <div class="flex-fill bg-white rounded-3 py-2 mx-1 shadow-sm">
+                            <i class="bi bi-hand-thumbs-down-fill text-danger d-block fs-5"></i>
+                            <small class="text-muted">عدم إعجاب</small>
+                            <div class="fw-bold">@story.Story.DislikesCount</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a asp-action="Details" asp-route-id="@story.Story.Id" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="bi bi-eye-fill"></i> عرض
+                        </a>
+                        <a href="/Story/UpdateStory/@story.Story.Id" class="btn btn-outline-warning btn-sm w-100">
+                            <i class="bi bi-pencil"></i> تعديل
+                        </a>
+                        <a href="/Story/Delete/@story.Story.Id" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-trash"></i> حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

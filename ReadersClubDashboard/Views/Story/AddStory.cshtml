@@ -1,0 +1,95 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CreateStoryForm
+<div class="container mt-3" dir="rtl">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-body p-5">
+<h2 class="mb-4">إضافة روايه جديده</h2>
+
+<form asp-action="AddStory" method="post" enctype="multipart/form-data" class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control rounded-3 shadow-sm" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">غلاف الروايه</label>
+                    <input type="file" name="coverFile" class="form-control rounded-3 shadow-sm" />
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control rounded-3 shadow-sm" rows="3"></textarea>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Summary" class="form-label"></label>
+                    <textarea asp-for="Summary" class="form-control rounded-3 shadow-sm" rows="2"></textarea>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">PDF ملف الروايه</label>
+                    <input type="file" name="pdfFile" class="form-control rounded-3 shadow-sm" accept=".pdf" />
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">الملف الصوتي (MP3)</label>
+                    <input type="file" name="audioFile" class="form-control rounded-3 shadow-sm" accept=".mp3" />
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="CategoryId" class="form-label">التصنيف</label>
+        <select asp-for="CategoryId" class="form-select form-select-lg shadow-sm rounded-3"
+                asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+            <option value="0">اختر التصنيف</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="ChannelId" class="form-label">القناه</label>
+        <select asp-for="ChannelId" class="form-select form-select-lg shadow-sm rounded-3"
+                asp-items="@(new SelectList(Model.Channels, "Id", "Name"))">
+            <option value="0">اختر القناه</option>
+        </select>
+    </div>
+    @if(User.IsInRole("admin")){
+    <div class="col-md-4">
+        <label asp-for="UserId" class="form-label">اسم المستخدم</label>
+        <select asp-for="UserId" class="form-select form-select-lg shadow-sm rounded-3"
+                asp-items="@(new SelectList(Model.ApplicationUsers, "Id", "UserName"))">
+            <option value="0">اختر اسم المستخدم</option>
+        </select>
+    </div>
+    }
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-user-plus"></i> إضافة
+                    </button>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Stories" class="btn btn-secondary px-4">
+                            <i class="fas fa-arrow-left"></i> العودة إلى القائمة
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="AuthorStories" class="btn btn-secondary px-4">
+                            <i class="fas fa-arrow-left"></i> العودة إلى القائمة
+                        </a>
+                    }
+                </div>
+</form>
+</div>
+</div>
+</div>
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+

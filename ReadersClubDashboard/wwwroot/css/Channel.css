@@ -1,0 +1,41 @@
+﻿/*start global style for channel*/
+/*this is some global classes for style theam*/
+.bg-gray-dark {
+	background-color: var(--dark-gray);
+}
+
+.bg-yellow {
+	background-color: var(--pale-yellow);
+}
+
+.bg-blue {
+	background-color: var(--light-cyan);
+}
+
+.bg-red {
+	background-color: var(--light-coral);
+}
+/*end global style for channel*/
+
+/*start navbar style*/
+.navbar #add-channel {
+	font-size: 16px;
+	width: 30px;
+	height: 30px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 10px;
+}
+/*endnavbar style*/
+
+/*start channel section style*/
+.channel .card {
+	box-shadow: 0px 0px 4px white;
+}
+
+.channel .card .bg-blue:hover {
+	background-color: aqua;
+}
+/*end channel section style*/
+

@@ -1,0 +1,86 @@
+﻿@model Statistics
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container my-5">
+    <div class="row g-4">
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm rounded-4 border-0 text-center hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-container bg-primary mb-3">
+                        <i class="bi bi-book display-5 text-white"></i>
+                    </div>
+                    <h5 class="card-title mb-2 text-muted">عدد الروايات</h5>
+                    <h2 class="fw-bold">@Model.StoriesCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm rounded-4 border-0 text-center hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-container bg-danger mb-3">
+                        <i class="bi bi-pencil-square display-5 text-white"></i>
+                    </div>
+                    <h5 class="card-title mb-2 text-muted">عدد الكتاب</h5>
+                    <h2 class="fw-bold">@Model.AuthorsCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm rounded-4 border-0 text-center hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-container bg-info mb-3">
+                        <i class="bi bi-collection-play display-5 text-white"></i>
+                    </div>
+                    <h5 class="card-title mb-2 text-muted">عدد القنوات</h5>
+                    <h2 class="fw-bold">@Model.ChannelsCount</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm rounded-4 border-0 text-center hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-container bg-warning mb-3">
+                        <i class="bi bi-chat-left-text display-5 text-white"></i>
+                    </div>
+                    <h5 class="card-title mb-2 text-muted">عدد التعليقات</h5>
+                    <h2 class="fw-bold">@Model.ReviewsCount</h2>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</div>
+@section Notification{
+<script>
+    var flag = @Model.ToString().ToLower();
+    if (flag) {
+
+            Swal.fire({
+                toast: true,
+                position: 'top',
+                title: '📦 حكايات قيد الانتظار',
+                text: 'هناك روايات قيد الانتظار... ألقِ نظرة عليها لتبدأ الحكاية!',
+                icon: '', // ما نستخدم أيقونة SweetAlert
+                showConfirmButton: false,
+                timer: 6000,
+                timerProgressBar: true,
+                background: '#FDFAF6',
+                customClass: {
+                    title: 'swal2-title',
+                    popup: 'swal2-popup'
+                },
+                didOpen: (toast) => {
+                    toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+                    toast.style.borderRadius = '12px';
+                    toast.style.padding = '10px 15px';
+                    title: 'my-toast-title'
+                }
+            });
+    }       
+</script>
+}

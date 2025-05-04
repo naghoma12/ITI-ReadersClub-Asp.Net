@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ReviewViewModel>
+
+@{
+    ViewData["Title"] = "All Reviews";
+}
+
+<h2 class="mb-4">قائمة التقييمات</h2>
+
+<table class="table table-bordered table-striped text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>الرواية</th>
+            <th>اسم المستخدم</th>
+            <th>التقييم</th>
+            <th>التعليق</th>
+            <th>الاجراء</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model)
+        {
+            <tr>
+                <td>@review.StoryTitle</td>
+                <td>@review.UserName</td>
+                <td>
+                    @for (int i = 0; i < review.Rating; i++)
+                    {
+                        <i class="fas fa-star text-warning"></i>
+                    }
+                    @for (int i = review.Rating; i < 5; i++)
+                    {
+                        <i class="far fa-star text-muted"></i>
+                    }
+                </td>
+                <td>@review.Comment</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@review.Id" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

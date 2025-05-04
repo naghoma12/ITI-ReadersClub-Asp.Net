@@ -1,0 +1,111 @@
+﻿@model ReadersClubCore.Models.Story
+@{
+    ViewData["Title"] = "Delete";
+}
+<div class="container mt-3" dir="rtl">
+        <div class="card shadow-lg border-danger rounded-4">
+            <div class="card-body p-5">
+                <h3 class="text-center text-danger fw-bold mb-4">
+                    هل أنت متأكد من حذف هذه الروايه؟
+                </h3>
+        <div class="row g-0">
+            <!-- صورة الغلاف -->
+            <div class="col-md-4">
+                @if (!string.IsNullOrEmpty(Model.Cover))
+                {
+                    <img src="~/Uploads/Covers/@Model.Cover" class="img-fluid h-100 rounded-start" style="object-fit: cover;" alt="غلاف الرواية" />
+                }
+                else
+                {
+                    <div class="bg-light text-center d-flex align-items-center justify-content-center h-100">
+                        <span class="text-muted">لا يوجد غلاف</span>
+                    </div>
+                }
+            </div>
+
+            <!-- التفاصيل -->
+            <div class="col-md-8">
+                <div class="card-body p-4">
+                    <h3 class="card-title fw-bold mb-3">@Model.Title</h3>
+                    <!-- ملخص -->
+                    <p class="mb-3"><strong>الملخص:</strong> @Model.Summary</p>
+
+                    <!-- الوصف -->
+                    <p class="mb-3"><strong>الوصف الكامل:</strong> @Model.Description</p>
+
+                    <!-- معلومات إضافية -->
+                    <div class="mb-3">
+                        <span class="badge bg-secondary rounded-pill">التصنيف: @Model.Category?.Name</span>
+                        <span class="badge bg-primary rounded-pill">المشاهدات: @Model.ViewsCount</span>
+                        <span class="badge bg-success rounded-pill">إعجابات: @Model.LikesCount</span>
+                        <span class="badge bg-danger rounded-pill">عدم إعجاب: @Model.DislikesCount</span>
+                        <span class="badge bg-warning text-dark rounded-pill">الحالة: @Model.Status.ToString()</span>
+                    </div>
+
+                    <!-- ملفات -->
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(Model.File))
+                        {
+                            <a href="~/Uploads/pdfs/@Model.File" class="btn btn-outline-dark btn-sm me-2" target="_blank">
+                                <i class="bi bi-file-earmark-pdf-fill"></i> تحميل الملف
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Audio))
+                        {
+                            <a href="~/Uploads/Audios/@Model.Audio" class="btn btn-outline-primary btn-sm" target="_blank">
+                                <i class="bi bi-headphones"></i> تشغيل الصوت
+                            </a>
+                        }
+                    </div>
+
+                    <!-- القناة وصاحب القصة -->
+                    <p class="text-muted small">
+                        <strong>الكاتب:</strong> @Model.User?.UserName <br />
+                        <strong>القناة:</strong> @Model.Channel?.Name
+                    </p>
+
+                    <!-- حالة التفعيل -->
+                    <p class="text-muted small">
+                        <strong>نشطة:</strong> @(Model.IsActive ? "نعم" : "لا") <br />
+                        <strong>مقبولة:</strong> @(Model.IsValid ? "نعم" : "لا")
+                    </p>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Title" />
+                        <input type="hidden" asp-for="Summary" />
+                        <input type="hidden" asp-for="Description" />
+                        <input type="hidden" asp-for="File" />
+                        <input type="hidden" asp-for="Audio" />
+                        <input type="hidden" asp-for="Cover" />
+                        <input type="hidden" asp-for="ViewsCount" />
+                        <input type="hidden" asp-for="LikesCount" />
+                        <input type="hidden" asp-for="DislikesCount" />
+                        <input type="hidden" asp-for="IsActive" />
+                        <input type="hidden" asp-for="IsValid" />
+                        <input type="hidden" asp-for="CategoryId" />
+                        <input type="hidden" asp-for="ChannelId" />
+                        <input type="hidden" asp-for="UserId" />
+                        <input type="hidden" asp-for="Status" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> حذف
+                    </button>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a asp-action="Stories" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> العودة
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="AuthorStories" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> العودة
+                            </a>
+                        }
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

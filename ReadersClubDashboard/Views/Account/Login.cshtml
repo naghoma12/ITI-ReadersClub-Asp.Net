@@ -1,0 +1,53 @@
+﻿@model LoginedUser
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+   
+</head>
+<body>
+
+    <div class="login-card">
+        <form asp-action="Login" method="post" dir="rtl">
+            <h2 class="mb-4 text-center">تسجيل الدخول</h2>
+
+            <div asp-validation-summary="All" class="text-danger mb-3 text-end"></div>
+
+            <div class="mb-4 text-end">
+                <label class="form-label" asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control text-end" placeholder="ادخل اسم المستخدم" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4 text-end">
+                <label class="form-label" asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control text-end" placeholder="ادخل الرقم السري" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-4 text-end">
+                <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                <label class="form-check-label" asp-for="RememberMe"></label>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+﻿@model ReadersClubCore.Models.Story
+
+@{
+    ViewData["Title"] = "تفاصيل الرواية";
+}
+<div class="container mt-3" dir="rtl">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-body p-5">
+        <div class="row g-0">
+            <!-- صورة الغلاف -->
+            <div class="col-md-4">
+                @if (!string.IsNullOrEmpty(Model.Cover))
+                {
+                    <img src="~/Uploads/Covers/@Model.Cover" class="img-fluid h-100 rounded-start" style="object-fit: cover;" alt="غلاف الرواية" />
+                }
+                else
+                {
+                    <div class="bg-light text-center d-flex align-items-center justify-content-center h-100">
+                        <span class="text-muted">لا يوجد غلاف</span>
+                    </div>
+                }
+            </div>
+
+            <!-- التفاصيل -->
+            <div class="col-md-8">
+                <div class="card-body p-4">
+                    <h3 class="card-title fw-bold mb-3">@Model.Title</h3>
+                    <!-- ملخص -->
+                    <p class="mb-3"><strong>الملخص:</strong> @Model.Summary</p>
+
+                    <!-- الوصف -->
+                    <p class="mb-3"><strong>الوصف الكامل:</strong> @Model.Description</p>
+
+                    <!-- معلومات إضافية -->
+                    <div class="mb-3">
+                        <span class="badge bg-secondary rounded-pill">التصنيف: @Model.Category?.Name</span>
+                        <span class="badge bg-primary rounded-pill">المشاهدات: @Model.ViewsCount</span>
+                        <span class="badge bg-success rounded-pill">إعجابات: @Model.LikesCount</span>
+                        <span class="badge bg-danger rounded-pill">عدم إعجاب: @Model.DislikesCount</span>
+                        <span class="badge bg-warning text-dark rounded-pill">الحالة: @Model.Status.ToString()</span>
+                    </div>
+
+                    <!-- ملفات -->
+                    <div class="mb-3">
+                        @if (!string.IsNullOrEmpty(Model.File))
+                        {
+                            <a href="~/Uploads/pdfs/@Model.File" class="btn btn-outline-dark btn-sm me-2" target="_blank">
+                                <i class="bi bi-file-earmark-pdf-fill"></i> تحميل الملف
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Audio))
+                        {
+                            <a href="~/Uploads/Audios/@Model.Audio" class="btn btn-outline-primary btn-sm" target="_blank">
+                                <i class="bi bi-headphones"></i> تشغيل الصوت
+                            </a>
+                        }
+                    </div>
+
+                    <!-- القناة وصاحب القصة -->
+                    <p class="text-muted small">
+                        <strong>الكاتب:</strong> @Model.User?.UserName <br />
+                        <strong>القناة:</strong> @Model.Channel?.Name
+                    </p>
+
+                    <!-- حالة التفعيل -->
+                    <p class="text-muted small">
+                        <strong>نشطة:</strong> @(Model.IsActive ? "نعم" : "لا") <br />
+                        <strong>مقبولة:</strong> @(Model.IsValid ? "نعم" : "لا")
+                    </p>
+                    @if(User.IsInRole("admin"))
+                    {
+                        @if (!Model.IsValid)
+                        {
+                            <a href="/Story/ApproveStory/@Model.Id" class="btn btn-success me-2">
+                                <i class="bi bi-check-circle-fill"></i> قبول الرواية
+                            </a>
+                            <a href="/Story/RejectStory/@Model.Id" class="btn btn-danger me-2">
+                                <i class="bi bi-x-circle-fill"></i> رفض الرواية
+                            </a>
+                        }
+
+                        @if (!Model.IsActive)
+                        {
+                            <a href="/Story/ActivateStory/@Model.Id" class="btn btn-outline-primary me-2">
+                                <i class="bi bi-toggle-on"></i> تفعيل الرواية
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/Story/Disable/@Model.Id" class="btn btn-outline-secondary me-2">
+                                <i class="bi bi-toggle-off"></i> إلغاء التفعيل
+                            </a>
+                        }
+                    }
+                    <a href="/Story/UpdateStory/@Model.Id" class="btn btn-outline-warning me-2">
+                        <i class="bi bi-pencil"></i> تعديل
+                    </a>
+                    <a href="/Story/Delete/@Model.Id" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> حذف
+                    </a>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

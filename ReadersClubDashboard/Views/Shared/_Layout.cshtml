@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Readers Club Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="./css/Channel.css" />
+ 
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4 class="text-center">نادي القراء</h4>
+        <div class="Sidebar-links">
+            @if (User.IsInRole("author"))
+            {
+                <a href="@Url.Action("Index", "Category")">التصنيفات</a>
+            }
+
+            @if(User.IsInRole("admin"))
+            {
+            <a href="@Url.Action("Stories", "Story")">قائمة الروايات</a>
+            }
+            else
+            {
+                <a href="@Url.Action("AuthorStories", "Story")">قائمة الروايات</a>
+
+            }
+            @if (User.IsInRole("admin"))
+            {
+                <a href="@Url.Action("GetInValidStories", "Story")">الروايات المعلقه</a>
+            }
+            @if (User.IsInRole("admin"))
+            {
+                <a href="@Url.Action("MostViewedStories", "Story")">الروايات الأكثر مشاهده</a>
+            }
+            else
+            {
+                <a href="@Url.Action("MostViewedAuthorStories", "Story")">الروايات الأكثر مشاهده</a>
+            }
+            @if (User.IsInRole("admin"))
+            {
+                <a href="@Url.Action("MostRatedStories", "Story")">الروايات الأعلى تقييماً</a>
+            }
+            else
+            {
+                <a href="@Url.Action("MostRatedAuthorStories", "Story")">الروايات الأعلى تقييماً</a>
+            }
+            @if (User.IsInRole("admin"))
+            {
+                <a href="@Url.Action("Index", "Reviews")">التقييمات</a>
+            }
+            else
+            {
+                <a href="@Url.Action("AuthorReviews", "Reviews")">التقييمات</a>
+            }
+           @if(User.IsInRole("admin"))
+           {
+            <a href="@Url.Action("Index", "User")">المستخدمين</a>
+           }
+            @if(User.IsInRole("admin"))
+           {
+                <a href="@Url.Action("Index", "Channel")">القنوات</a>
+            }
+            else
+            {
+                <a href="@Url.Action("AuthorChannels", "Channel")">القنوات</a>
+
+            }
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <div class="topbar">
+            <h5>
+                <img src="~/Uploads/Covers/logo-removebg-preview.png" alt="Logo" style="height: 80px;width:100px;border-radius : 50%; vertical-align: middle; ">
+                نادي القراء
+            </h5>
+            <a asp-action="LogOut" asp-controller="Account" class="btn-logout">تسجيل خروج</a>
+        </div>
+        <div class="main-content-page">
+            <!-- مكان عرض الصفحات -->
+            @RenderBody()
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js" ></script>
+    @RenderSection("Notification", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

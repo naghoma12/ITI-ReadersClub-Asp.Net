@@ -1,0 +1,68 @@
+﻿@model ReadersClubCore.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container mt-3" dir="rtl">
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-body p-5">
+            <h2 class="mb-4 text-center fw-bold">تعديل بيانات مستخدم </h2>
+            <form asp-action="Edit" enctype="multipart/form-data" novalidate>
+
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control rounded-3 shadow-sm" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label fw-semibold"></label>
+                    <input asp-for="UserName" class="form-control rounded-3 shadow-sm" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" class="form-control rounded-3 shadow-sm" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                    <input asp-for="PhoneNumber" class="form-control rounded-3 shadow-sm" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">الصورة (PNG فقط)</label>
+                    <input  class="form-control form-control-lg rounded-3" type="file" name="formFile" accept=".png" />
+                </div>
+
+               
+                    <input asp-for="Image" class="form-control" hidden/>
+
+
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-edit"></i> تعديل
+                    </button>
+                        <a asp-action="Index" class="btn btn-secondary px-4">
+                            <i class="fas fa-arrow-left"></i> العودة إلى القائمة
+                        </a>
+                  
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

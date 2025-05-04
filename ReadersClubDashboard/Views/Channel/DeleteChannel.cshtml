@@ -1,0 +1,71 @@
+﻿@model ReadersClubCore.Models.Channel
+
+@{
+    ViewData["Title"] = "DeleteChannel";
+}
+
+<div class="container mt-3" dir="rtl">
+        <div class="card shadow-lg border-danger rounded-4">
+            <div class="card-body p-5">
+                <h3 class="text-center text-danger fw-bold mb-4">
+                    هل أنت متأكد من حذف هذه القناه؟
+                </h3>
+            <div class="row mb-3">
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="~/Uploads/ChannelsImages/@Model.Image" alt="صورة القناه" class="img-thumbnail rounded-circle shadow" style="width: 150px; height: 150px;" />
+                    }
+                    else
+                    {
+                        <img src="~/Uploads/ChannelsImages/welcome-image.jpeg" alt="صورة القناه" class="img-thumbnail rounded-circle shadow" style="width: 150px; height: 150px;" />
+                    }
+                    <p class="mt-2 text-muted">@Model.Name</p>
+                </div>
+
+                <div class="col-md-8 pt-3">
+                    <dl class="row">
+
+                        <dt class="col-sm-4 fw-bold text-secondary">اسم المستخدم</dt>
+                        <dd class="col-sm-8">@Model.User?.UserName</dd>
+                        <dt class="col-sm-4 fw-bold text-secondary">وصف القناه</dt>
+                        @if (string.IsNullOrEmpty(Model.Description))
+                        {
+                            <dd class="col-sm-8">لا يوجد وصف للقناه</dd>
+                        }
+                        else
+                        {
+                            <dd class="col-sm-8">@Model.Description</dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+            <form asp-action="DeleteChannel" method="post">
+                <input  type="hidden" asp-for="Id"/>
+                <input  type="hidden" asp-for="Name"/>
+                <input  type="hidden" asp-for="Description"/>
+                <input  type="hidden" asp-for="Image"/>
+                <input type="hidden" asp-for="UserId"/>
+            <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-trash"></i> حذف
+                    </button>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> العودة
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="AuthorChannels" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> العودة
+                        </a>
+                    }
+            </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

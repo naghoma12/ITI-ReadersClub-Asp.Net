@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "التصنيفات";
+}
+@model IEnumerable<ReadersClubCore.Models.Category>
+
+<div class="container mt-1" dir="rtl">
+    <div class="mb-3 text-start">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus-circle p-2"></i> إضافة تصنيف 
+        </a>
+    </div>
+
+<div class="table-responsive">
+<table class="table table-bordered table-striped text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>الاسم</th>
+            <th>تاريخ الإضافة</th>
+            <th>الإجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.CreatedDate.ToString("dd-MM-yyyy hh:mm tt")</td>
+                <td>
+                    <!-- تعديل وحذف -->
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil"></i> تعديل
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i> حذف
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+</div>

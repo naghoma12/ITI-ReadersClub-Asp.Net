@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <Compile Remove="wwwroot\ChannelsImages\**" />
+
+    <Compile Remove="wwwroot\ChannelUploadedImages\**" />
+
+    <Content Remove="wwwroot\ChannelsImages\**" />
+    <Content Remove="wwwroot\ChannelUploadedImages\**" />
+    <EmbeddedResource Remove="wwwroot\ChannelsImages\**" />
+    <EmbeddedResource Remove="wwwroot\ChannelUploadedImages\**" />
+    <None Remove="wwwroot\ChannelsImages\**" />
+    <None Remove="wwwroot\ChannelUploadedImages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReadersClubCore\ReadersClubCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="wwwroot\Uploads\audios\" />
+    <Folder Include="wwwroot\Uploads\pdfs\" />
+  </ItemGroup>
+
+</Project>

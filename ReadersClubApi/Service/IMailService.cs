@@ -1,0 +1,9 @@
+﻿using ReadersClubApi.Helper;
+
+namespace ReadersClubApi.Service
+{
+    public interface IMailService
+    {
+        Task SendEmailAsync(string email, string subject, string message);
+    }
+}

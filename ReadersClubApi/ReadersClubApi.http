@@ -1,0 +1,6 @@
+@ReadersClubApi_HostAddress = http://localhost:5298
+
+GET {{ReadersClubApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
