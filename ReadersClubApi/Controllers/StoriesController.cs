@@ -26,7 +26,7 @@ namespace ReadersClubApi.Controllers
         }
 
         [HttpGet("popular")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult GetPopularStories()
         {
             var stories = _storyService.GetMostPopularStories();

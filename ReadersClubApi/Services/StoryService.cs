@@ -197,5 +197,50 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
             return savedStories;
 
         }
+
+        public async Task<List<StoryDto>> FilterStory(string? storyTitle, string? category, string? writerName)
+        {
+            if (string.IsNullOrEmpty(storyTitle) && string.IsNullOrEmpty(category) && string.IsNullOrEmpty(writerName))
+            {
+                return GetAllStories();
+            }
+            else
+            {
+                var stories = await _context.Stories
+                    .Include(s => s.Channel)
+                    .Include(s => s.Category)
+                    .Where(s => s.IsValid && !s.IsDeleted && s.IsActive && s.Status == Status.Approved)
+                    .ToListAsync();
+
+                if (!string.IsNullOrEmpty(storyTitle))
+                {
+                    stories = stories.Where(s => s.Title.Contains(storyTitle)).ToList();
+                }
+                if (!string.IsNullOrEmpty(category))
+                {
+                    stories = stories.Where(s => s.Category.Name.Contains(category)).ToList();
+                }
+                if (!string.IsNullOrEmpty(writerName))
+                {
+                    stories = stories.Where(s => s.User.Name.Contains(writerName)).ToList();
+                }
+
+                return stories.Select(s => new StoryDto
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Cover = $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
+                    Description = s.Description,
+                    Summary = s.Summary,
+                    AverageRating = s.Reviews.Any() ? s.Reviews.Average(r => (float)r.Rating) : 0,
+                    ChannelName = s.Channel.Name,
+                    CategoryName = s.Category.Name,
+                    ViewsCount = s.ViewsCount,
+                    LikesCount = s.LikesCount,
+                    DislikesCount = s.DislikesCount,
+
+                }).ToList();
+            }
+        }
     }
 }

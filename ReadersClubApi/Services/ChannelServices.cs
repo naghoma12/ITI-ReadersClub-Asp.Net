@@ -3,6 +3,8 @@ using ReadersClubApi.DTO;
 using ReadersClubApi.Service;
 using ReadersClubCore.Data;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Net.WebRequestMethods;
 
 
 namespace ReadersClubApi.Services
@@ -27,16 +29,18 @@ namespace ReadersClubApi.Services
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
-                    Image = $"http://readersclub.runasp.net//Uploads/ChannelsImages/{c.Image}",
+                    Image = string.IsNullOrEmpty(c.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{c.Image}",
                     Owner = new ChannelOwnerDto
                     {
                         Id = c.User.Id,
-                        UserName = c.User.UserName
+                        UserName = c.User.Name
                     },
                     Stories = c.Stories.Select(s => new StoryMiniDto
                     {
                         Title = s.Title,
-                        Image = s.Cover,
+                        Image =$"http://readersclub.runasp.net//Uploads/{s.Cover}",
                         Category = s.Category.Name
                     }).ToList()
                 }).ToList();
@@ -55,16 +59,18 @@ namespace ReadersClubApi.Services
                     Id = c.Id,
                     Name = c.Name,
                     Description = c.Description,
-                    Image = $"http://readersclub.runasp.net//Uploads/ChannelsImages/{c.Image}",
+                    Image = string.IsNullOrEmpty(c.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{c.Image}",
                     Owner = new ChannelOwnerDto
                     {
                         Id = c.User.Id,
-                        UserName = c.User.UserName
+                        UserName = c.User.Name
                     },
                     Stories = c.Stories.Select(s => new StoryMiniDto
                     {
                         Title = s.Title,
-                        Image = s.Cover,
+                        Image = $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                         Category = s.Category.Name
                     }).ToList()
                 }).FirstOrDefault(x => x.Id == id);
