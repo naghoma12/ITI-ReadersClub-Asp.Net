@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReadersClubApi.Service;
 using ReadersClubApi.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -26,6 +29,19 @@ public class ChannelController : ControllerBase
         if (channel == null)
             return NotFound();
         return Ok(channel);
+    }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost("subscribe/{channelId}")]
+    public async Task<IActionResult> Subscribe(int channelId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+            return Unauthorized();
+        var result = await _channelService.Subscribe(int.Parse(userId), channelId);
+        if (result)
+            return Ok();
+        return BadRequest("You are already subscribed to this channel");
+
     }
 
 }

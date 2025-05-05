@@ -2,6 +2,7 @@
 using ReadersClubApi.DTO;
 using ReadersClubApi.Service;
 using ReadersClubCore.Data;
+using ReadersClubCore.Models;
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
@@ -77,7 +78,25 @@ namespace ReadersClubApi.Services
 
             return channels;
         }
-
+        public async Task<bool> Subscribe(int channelId, int userId)
+        {
+            var subscribtion = new Subscribtion
+            {
+                ChannelId = channelId,
+                UserId = userId
+            };
+            await _context.Subscribtions.AddAsync(subscribtion);
+          var flag =  await _context.SaveChangesAsync();
+            if (flag > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
+    
 
 }

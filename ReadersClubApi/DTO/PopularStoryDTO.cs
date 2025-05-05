@@ -8,6 +8,7 @@
         public float AverageRating { get; set; }
 
         public string ChannelName { get; set; }
+        public string ChannelImage { get; set; }
         public string CategoryName { get; set; }
     }
 }

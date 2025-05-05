@@ -11,7 +11,7 @@ namespace ReadersClubApi.DTO
         public float AverageRating { get; set; }
         public string ChannelName { get; set; }
         public string CategoryName { get; set; }
-
+        public string ChannelImage { get; set; }
         public string File { get; set; }
         public string Audio { get; set; }
         public string Summary { get; set; }

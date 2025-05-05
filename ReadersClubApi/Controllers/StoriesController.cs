@@ -119,7 +119,12 @@ namespace ReadersClubApi.Controllers
 
         //    return Ok(savedStories);
         //}
-       
+        [HttpGet("FilterStory")]
+       public async Task<IActionResult> FilterStory(string? title, string? category, string? writerName)
+        {
+            var stories = _storyService.FilterStory(title, category, writerName);
+            return Ok(stories);
+        }
 
     }
 }

@@ -6,5 +6,6 @@ namespace ReadersClubApi.Service
     {
         List<ChannelWithStoriesDto> GetAllChannels();
         ChannelWithStoriesDto GetChannelById(int id);
+        Task<bool> Subscribe(int userId, int channelId);
     }
 }

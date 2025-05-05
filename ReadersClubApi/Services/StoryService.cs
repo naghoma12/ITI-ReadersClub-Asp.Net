@@ -29,10 +29,13 @@ namespace ReadersClubApi.Services
                     Cover = $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                     AverageRating = s.Reviews.Any() ? s.Reviews.Average(r => (float)r.Rating) : 0,
                     ChannelName = s.Channel.Name,
+                    ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}",
                     CategoryName = s.Category.Name
                 })
                 .OrderByDescending(s => s.AverageRating)
-                .Take(10)
+                .Take(8)
                 .ToList();
 
             return stories;
@@ -56,6 +59,9 @@ namespace ReadersClubApi.Services
                     ViewsCount = s.ViewsCount,
                     LikesCount = s.LikesCount,
                     DislikesCount = s.DislikesCount,
+                    ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}"
 
                 })
                  .Distinct()
@@ -214,15 +220,15 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
 
                 if (!string.IsNullOrEmpty(storyTitle))
                 {
-                    stories = stories.Where(s => s.Title.Contains(storyTitle)).ToList();
+                    stories = stories.Where(s => s.Title.ToLower().Contains(storyTitle.ToLower())).ToList();
                 }
                 if (!string.IsNullOrEmpty(category))
                 {
-                    stories = stories.Where(s => s.Category.Name.Contains(category)).ToList();
+                    stories = stories.Where(s => s.Category.Name.ToLower().Contains(category.ToLower())).ToList();
                 }
                 if (!string.IsNullOrEmpty(writerName))
                 {
-                    stories = stories.Where(s => s.User.Name.Contains(writerName)).ToList();
+                    stories = stories.Where(s => s.User.Name.ToLower().Contains(writerName.ToLower())).ToList();
                 }
 
                 return stories.Select(s => new StoryDto
