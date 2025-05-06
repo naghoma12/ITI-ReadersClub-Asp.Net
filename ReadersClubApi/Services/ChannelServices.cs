@@ -16,7 +16,7 @@ namespace ReadersClubApi.Services
 
         public ChannelService(ReadersClubContext context)
         {
-            _context = context;   
+            _context = context;
         }
 
         public List<ChannelWithStoriesDto> GetAllChannels()
@@ -41,7 +41,7 @@ namespace ReadersClubApi.Services
                     Stories = c.Stories.Select(s => new StoryMiniDto
                     {
                         Title = s.Title,
-                        Image =$"http://readersclub.runasp.net//Uploads/{s.Cover}",
+                        Image = $"http://readersclub.runasp.net//Uploads/{s.Cover}",
                         Category = s.Category.Name
                     }).ToList()
                 }).ToList();
@@ -70,6 +70,7 @@ namespace ReadersClubApi.Services
                     },
                     Stories = c.Stories.Select(s => new StoryMiniDto
                     {
+                        Id = s.Id,
                         Title = s.Title,
                         Image = $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                         Category = s.Category.Name
@@ -80,13 +81,19 @@ namespace ReadersClubApi.Services
         }
         public async Task<bool> Subscribe(int channelId, int userId)
         {
-            var subscribtion = new Subscribtion
+            var existingSubscription = await _context.Subscribtions
+                        .FirstOrDefaultAsync(s => s.UserId == userId && s.ChannelId == channelId);
+
+            if (existingSubscription != null)
+                return false;
+
+            var subscription = new Subscribtion
             {
                 ChannelId = channelId,
                 UserId = userId
             };
-            await _context.Subscribtions.AddAsync(subscribtion);
-          var flag =  await _context.SaveChangesAsync();
+            _context.Subscribtions.Add(subscription);
+            var flag = await _context.SaveChangesAsync();
             if (flag > 0)
             {
                 return true;
@@ -96,7 +103,36 @@ namespace ReadersClubApi.Services
                 return false;
             }
         }
+        public async Task<bool> UnSubscribe(int channelId, int userId)
+        {
+            var subscribtion = await _context.Subscribtions
+           .FirstOrDefaultAsync(s => s.ChannelId == channelId && s.UserId == userId);
+
+            if (subscribtion == null)
+            {
+                return false; // Nothing to remove
+            }
+
+            _context.Subscribtions.Remove(subscribtion);
+            var flag = await _context.SaveChangesAsync();
+            return flag > 0;
+        }
+    
+        public async Task<bool> IsSubscribe(int channelId, int userId)
+        {
+            var subscribtion = await _context.Subscribtions
+                .FirstOrDefaultAsync(x => x.ChannelId == channelId && x.UserId == userId);
+            if (subscribtion != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
+
     
 
 }

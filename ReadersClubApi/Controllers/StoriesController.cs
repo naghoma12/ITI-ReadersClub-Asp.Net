@@ -35,7 +35,7 @@ namespace ReadersClubApi.Controllers
 
         [HttpGet]
         public IActionResult GetAllStories()
-        {
+            {
             var stories = _storyService.GetAllStories();
             return Ok(stories);
         }
@@ -120,9 +120,9 @@ namespace ReadersClubApi.Controllers
         //    return Ok(savedStories);
         //}
         [HttpGet("FilterStory")]
-       public async Task<IActionResult> FilterStory(string? title, string? category, string? writerName)
+       public async Task<IActionResult> FilterStory([FromQuery]string? title)
         {
-            var stories = _storyService.FilterStory(title, category, writerName);
+            var stories = await _storyService.FilterStory(title);
             return Ok(stories);
         }
 

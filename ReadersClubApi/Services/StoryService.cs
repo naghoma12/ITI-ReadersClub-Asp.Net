@@ -204,9 +204,9 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
 
         }
 
-        public async Task<List<StoryDto>> FilterStory(string? storyTitle, string? category, string? writerName)
+        public async Task<List<StoryDto>> FilterStory(string? storyTitle)
         {
-            if (string.IsNullOrEmpty(storyTitle) && string.IsNullOrEmpty(category) && string.IsNullOrEmpty(writerName))
+            if (string.IsNullOrEmpty(storyTitle))
             {
                 return GetAllStories();
             }
@@ -220,15 +220,7 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
 
                 if (!string.IsNullOrEmpty(storyTitle))
                 {
-                    stories = stories.Where(s => s.Title.ToLower().Contains(storyTitle.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(category))
-                {
-                    stories = stories.Where(s => s.Category.Name.ToLower().Contains(category.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(writerName))
-                {
-                    stories = stories.Where(s => s.User.Name.ToLower().Contains(writerName.ToLower())).ToList();
+                    stories = stories.Where(s => s.Title.Trim().ToLower().Contains(storyTitle.Trim().ToLower())).ToList();
                 }
 
                 return stories.Select(s => new StoryDto
@@ -244,6 +236,9 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                     ViewsCount = s.ViewsCount,
                     LikesCount = s.LikesCount,
                     DislikesCount = s.DislikesCount,
+                    ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}"
 
                 }).ToList();
             }
