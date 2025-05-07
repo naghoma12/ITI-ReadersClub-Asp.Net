@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ReadersClubApi.DTO;
 using ReadersClubApi.Service;
 using ReadersClubApi.Services;
+using ReadersClubCore.Models;
 using System.Net;
 using System.Security.Claims;
 
@@ -58,73 +59,91 @@ namespace ReadersClubApi.Controllers
            
             return Ok();
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("{id}/like")]
         public IActionResult LikeStory(int id)
         {
             _storyService.UpdateStoryLikesCount(id);
             return Ok();
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("{id}/dislike")]
         public IActionResult DislikeStory(int id)
         {
             _storyService.UpdateStoryDislikesCount(id);
             return Ok();
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("{id}/unlike")]
         public IActionResult UnlikeStory(int id)
         {
             _storyService.UpdateStoryUnlikesCount(id);
             return Ok();
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("{id}/undislike")]
         public IActionResult UndislikeStory(int id)
         {
             _storyService.UpdateStoryUnDislikesCount(id);
             return Ok();
         }
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize]
-        //public IActionResult ToggleSaveStory(int storyId)
-        //{
-        //    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    var isSaved = _storyService.ToggleSaveStory(storyId, userId);
-        //    return Ok(new { isSaved });
-        //}
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("{storyId}/toggle-save")]
+        public IActionResult ToggleSaveStory(int storyId)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var isSaved = _storyService.ToggleSaveStory(storyId, userId);
+            return Ok(new { isSaved });
+        }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize]
-        //public IActionResult IsStorySaved(int storyId)
-        //{
-        //    var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    var result = _storyService.IsStorySaved(storyId, userId);
-        //    return Ok(result);
-        //}
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[HttpGet("saved")]
-        //public async Task<IActionResult> GetSavedStories()
-        //{
-        //    // استخراج userId من التوكن
-        //    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    if (userIdClaim == null)
-        //        return Unauthorized();
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("{storyId}/issaved")]
+        public IActionResult IsStorySaved(int storyId)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var result = _storyService.IsStorySaved(storyId, userId);
+            return Ok(result);
+        }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("saved")]
+        public async Task<IActionResult> GetSavedStories()
+        {
+            // استخراج userId من التوكن
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
 
-        //    int userId = Convert.ToInt32(userIdClaim);
+            int userId = Convert.ToInt32(userIdClaim);
 
-        //    // استدعاء الدالة في الخدمة
-        //    var savedStories = await _storyService.GetSavedStoriesByUserId(userId);
+            // استدعاء الدالة في الخدمة
+            var savedStories = await _storyService.GetSavedStoriesByUserId(userId);
 
-        //    return Ok(savedStories);
-        //}
+            return Ok(savedStories);
+        }
         [HttpGet("FilterStory")]
        public async Task<IActionResult> FilterStory(string? title, string? category, string? writerName)
         {
             var stories = _storyService.FilterStory(title, category, writerName);
             return Ok(stories);
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("add-review")]
+        public async Task<IActionResult> AddReview([FromBody] ReviewDto reviewDto)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            reviewDto.UserId = userId;
+            var review = new Review
+            {
+                Comment = reviewDto.Comment,
+                Rating = reviewDto.Rating,
+                StoryId = reviewDto.StoryId,
+                UserId = userId
+            };
+            await _reviewService.AddReview(review);
+            return Ok();
+        }
+
 
     }
+
 }

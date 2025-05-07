@@ -248,5 +248,24 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                 }).ToList();
             }
         }
+
+        public async Task<bool> AddReviewAsync(AddReviewDto dto)
+        {
+            var story = await _context.Stories.FirstOrDefaultAsync(s => s.Id == dto.StoryId);
+            if (story == null) return false;
+
+            var review = new Review
+            {
+                Comment = dto.Comment,
+                Rating = dto.Rating,
+                StoryId = dto.StoryId,
+                UserId = dto.UserId,
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
