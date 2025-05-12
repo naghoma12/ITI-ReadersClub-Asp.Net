@@ -160,7 +160,11 @@ namespace ReadersClubDashboard.Controllers
                     var user = await _userManager.FindByIdAsync(application.Id.ToString());
                     if (formFile != null)
                     {
-                        FileSettings.DeleteFile("Users",user.Image,_environment.WebRootPath);
+                        if(user.Image != null)
+                        {
+                            FileSettings.DeleteFile("Users",user.Image,_environment.WebRootPath);
+
+                        }
                         application.Image = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
                         application.Image = await FileSettings.UploadFile(formFile, "Users", _environment.WebRootPath);
                     }
