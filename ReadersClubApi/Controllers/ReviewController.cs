@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReadersClubApi.DTO;
@@ -35,7 +36,6 @@ namespace ReadersClubApi.Controllers
             return BadRequest("Invalid review data");
         }
         [HttpPut("UpdateReview")]
-        [Authorize]
         public async Task<IActionResult> UpdateReview(int id, ReviewDto reviewdto)
         {
             if (ModelState.IsValid)
@@ -81,5 +81,16 @@ namespace ReadersClubApi.Controllers
             await _reviewService.UpdateReview(review);
             return Ok("Review deleted successfully");
         }
+        [HttpGet("GetAllReviewsInStory")]
+        public async Task<IActionResult> GetAllReviewsInStory(int storyId)
+        {
+            var reviews = await _reviewService.GetAllReviewsInStory(storyId);
+            if (reviews == null || !reviews.Any())
+            {
+                return NotFound("No reviews found for this story");
+            }
+            return Ok(reviews);
+        }
+
     }
 }
