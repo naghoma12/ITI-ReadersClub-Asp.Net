@@ -54,7 +54,9 @@
                         <option value="0">اختر التصنيف</option>
                     </select>
                 </div>
-
+                <input type="hidden" asp-for="ViewsCount" />
+                <input type="hidden" asp-for="LikesCount" />
+                <input type="hidden" asp-for="DislikesCount" />
                 <div class="col-md-4">
                     <label asp-for="ChannelId" class="form-label">القناه</label>
                     <select asp-for="ChannelId" class="form-select form-select-lg shadow-sm rounded-3"

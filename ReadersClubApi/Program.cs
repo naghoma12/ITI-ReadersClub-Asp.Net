@@ -10,6 +10,7 @@ using ReadersClubCore.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ReadersClubApi
 {
@@ -34,7 +35,7 @@ namespace ReadersClubApi
             );
 
             builder.Services.AddScoped<TokenConfiguration>();
-
+            builder.Services.AddScoped<ProfileService>();
             builder.Services.AddScoped<ReviewService>();
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(
                 options =>
@@ -115,11 +116,11 @@ namespace ReadersClubApi
             var app = builder.Build();
             var env = app.Environment;
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+           // if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -127,7 +128,8 @@ namespace ReadersClubApi
             {
                 FileProvider = new PhysicalFileProvider(
         Path.Combine(env.WebRootPath, "Uploads")), 
-                RequestPath = "/Uploads"
+                RequestPath = "/Uploads",
+       
             });
 
             app.UseCors("AllowDashboard");

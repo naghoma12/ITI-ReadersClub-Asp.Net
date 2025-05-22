@@ -8,8 +8,7 @@ namespace ReadersClubApi.DTO
         [MaxLength(20)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters and spaces.")]
         public string Name { get; set; }
-        [Required]
-
+  
         public string? UserName { get; set; }
         [Required]
         [EmailAddress]

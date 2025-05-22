@@ -15,6 +15,6 @@ namespace ReadersClubCore.Models
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public int LastPage { get; set; } = 1;
+        public int LastPage { get; set; } = 0;
     }
 }

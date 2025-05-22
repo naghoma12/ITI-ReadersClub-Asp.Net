@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\Uploads\audios\" />
     <Folder Include="wwwroot\Uploads\pdfs\" />
   </ItemGroup>

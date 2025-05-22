@@ -38,7 +38,10 @@ namespace ReadersClubApi.Services
                         Id = c.User.Id,
                         UserName = c.User.Name
                     },
-                    Stories = c.Stories.Select(s => new StoryMiniDto
+                    Stories = c.Stories
+                    .Where(c => c.IsDeleted == false && c.IsValid == true
+                    && c.Status == Status.Approved&& c.IsActive == true)
+                    .Select(s => new StoryMiniDto
                     {
                         Title = s.Title,
                         Image = $"http://readersclub.runasp.net//Uploads/{s.Cover}",
@@ -68,7 +71,11 @@ namespace ReadersClubApi.Services
                         Id = c.User.Id,
                         UserName = c.User.Name
                     },
-                    Stories = c.Stories.Select(s => new StoryMiniDto
+                    Stories = c.Stories
+                    .Where(c => c.IsDeleted == false && c.IsValid == true
+                    && c.Status == Status.Approved
+                    && c.IsActive == true)
+                    .Select(s => new StoryMiniDto
                     {
                         Id = s.Id,
                         Title = s.Title,

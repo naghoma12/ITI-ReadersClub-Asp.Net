@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReadersClubApi.DTO;
@@ -18,12 +19,15 @@ namespace ReadersClubApi.Controllers
     {
         private readonly StoryService _storyService;
         private readonly ReviewService _reviewService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public StoriesController(StoryService storyService
-            ,ReviewService reviewService)
+            ,ReviewService reviewService,
+            UserManager<ApplicationUser> userManager)
         {
             _storyService = storyService;
             _reviewService = reviewService;
+            _userManager = userManager;
         }
 
         [HttpGet("popular")]
@@ -31,6 +35,12 @@ namespace ReadersClubApi.Controllers
         public IActionResult GetPopularStories()
         {
             var stories = _storyService.GetMostPopularStories();
+            return Ok(stories);
+        }
+        [HttpGet("MostViewed")]
+        public async Task<IActionResult> GetMostViewedStories()
+        {
+            var stories = await _storyService.MostViewedStories();
             return Ok(stories);
         }
 
@@ -142,6 +152,23 @@ namespace ReadersClubApi.Controllers
             await _reviewService.AddReview(review);
             return Ok();
         }
+        [HttpPost("SetLastPage")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> SetStoryPage(int storyId)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            try
+            {
+                await _storyService.AddStoryLastPage(userId, storyId);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("ex.message");
+            }
+        }
+
+
 
 
     }

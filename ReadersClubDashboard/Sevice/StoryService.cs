@@ -95,7 +95,8 @@ namespace ReadersClubDashboard.Service
             var stories = await _context.Stories
                 .Where(x => x.IsDeleted == false
                 && x.IsValid == true
-                && x.IsActive == true)
+                && x.IsActive == true
+                && x.Status == Status.Approved)
                 .Include(c => c.Category)
                 .Select(x => new StoryVM
                 {
@@ -114,7 +115,8 @@ namespace ReadersClubDashboard.Service
             var stories = await _context.Stories
                 .Where(x => x.IsValid == true
                 && x.IsDeleted == false
-                && x.IsActive == true)
+                && x.IsActive == true
+                && x.Status == Status.Approved)
                 .Include(c => c.Category)
                 .Select(x => new StoryVM
                 {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,17 +19,20 @@ namespace ReadersClubApi.Controllers
         private readonly TokenConfiguration _token;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMailService _mailService;
+        private readonly IConfiguration _configuration;
 
         public SecurityController(UserManager<ApplicationUser> userManager
             ,TokenConfiguration token
             ,SignInManager<ApplicationUser> signInManager
-            ,IMailService mailService)
+            ,IMailService mailService
+            ,IConfiguration configuration)
             
         {
             _userManager = userManager;
             _token = token;
             _signInManager = signInManager;
            _mailService = mailService;
+            _configuration = configuration;
         }
         //Register
         [HttpPost("Register")]
@@ -62,7 +67,8 @@ namespace ReadersClubApi.Controllers
                         return Ok(new
                         {
                             Message = "تم التسجيل بنجاح",
-                            Token = _token.CreateToken(user, _userManager).Result
+                            Token = _token.CreateToken(user, _userManager).Result,
+                            UserId = user.Id
                         });
                     }
                     ModelState.AddModelError("UserName", "اسم المستخدم موجود بالفعل .");
@@ -103,7 +109,8 @@ namespace ReadersClubApi.Controllers
                     return Ok(new
                     {
                         Message = "تم تسجيل الدخول بنجاح",
-                        Token = _token.CreateToken(user, _userManager).Result
+                        Token = _token.CreateToken(user, _userManager).Result,
+                        UserId = user.Id
                     });
                 }
                 return BadRequest("كلمة المرور غير صحيحة"); 
@@ -183,6 +190,25 @@ namespace ReadersClubApi.Controllers
             return BadRequest(new
             {
                 Message = "فشلت عملية تغيير كلمة المرور"
+            });
+        }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("GetUserImage")]
+        public async Task<IActionResult> GetUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("المستخدم غير موجود");
+            }
+            var image = $"{_configuration["ApiURL"]}//Uploads//Users/{user.Image}";
+            if (user.Image == null)
+            {
+                image = "http://readersclub.runasp.net//Uploads/Users/not_found.jpg";
+            }
+            return Ok(new
+            {
+                Image = image
             });
         }
     }

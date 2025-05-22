@@ -32,6 +32,13 @@ namespace ReadersClubDashboard.ViewModels
         public int UserId { get; set; }
         [Required]
         public int ChannelId { get; set; }
+        public long ViewsCount { get; set; }  // Default Value
+
+        [Range(0, int.MaxValue)]
+        public int LikesCount { get; set; } 
+
+        [Range(0, int.MaxValue)]
+        public int DislikesCount { get; set; } 
         public ICollection<Category> Categories { get; set; } = new List<Category>();
         public IEnumerable<Channel> Channels { get; set; } = new List<Channel>();
         public IEnumerable<ApplicationUser> ApplicationUsers { get; set; } = new List<ApplicationUser>();

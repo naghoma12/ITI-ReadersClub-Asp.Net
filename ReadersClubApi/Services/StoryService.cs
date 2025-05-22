@@ -21,7 +21,8 @@ namespace ReadersClubApi.Services
                 .Include(s => s.Channel)
                 .Include(s => s.Category)
                 .Where(s => s.IsValid && !s.IsDeleted
-                && s.Status == Status.Approved)
+                && s.Status == Status.Approved
+                && s.IsActive == true)
                 .Select(s => new PopularStoryDTO
                 {
                     Id = s.Id,
@@ -32,7 +33,8 @@ namespace ReadersClubApi.Services
                     ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
                     $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
                     $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}",
-                    CategoryName = s.Category.Name
+                    CategoryName = s.Category.Name,
+                    ViewsCount = s.ViewsCount
                 })
                 .OrderByDescending(s => s.AverageRating)
                 .Take(8)
@@ -40,12 +42,40 @@ namespace ReadersClubApi.Services
 
             return stories;
         }
+        public async Task<List<PopularStoryDTO>> MostViewedStories()
+        {
+            var stories = await _context.Stories
+                .Where(x => x.IsDeleted == false
+                && x.IsValid == true
+                && x.IsActive == true
+                && x.Status == Status.Approved).
+                Include(x => x.Channel)
+                .Include(c => c.Category)
+                .Select(s => new PopularStoryDTO
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Cover = $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
+                    AverageRating = s.Reviews.Any() ? s.Reviews.Average(r => (float)r.Rating) : 0,
+                    ChannelName = s.Channel.Name,
+                    ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}",
+                    CategoryName = s.Category.Name,
+                    ViewsCount = s.ViewsCount
+                })
+                .OrderByDescending(x => x.ViewsCount)
+                .Take(8)
+                .ToListAsync();
+            return stories;
+        }
         public List<StoryDto> GetAllStories()
         {
             var allstories = _context.Stories
                 .Include(s => s.Channel)
                 .Include(s => s.Category)
-                .Where(s => s.IsValid && !s.IsDeleted && s.IsActive && s.Status == Status.Approved)
+                .Where(s => s.IsValid && !s.IsDeleted && s.IsActive && s.Status == Status.Approved
+                && s.IsActive == true)
                 .Select(s => new StoryDto
                 {
                     Id = s.Id,
@@ -61,7 +91,11 @@ namespace ReadersClubApi.Services
                     DislikesCount = s.DislikesCount,
                     ChannelImage = string.IsNullOrEmpty(s.Channel.Image) ?
                     $"http://readersclub.runasp.net//Uploads/ChannelsImages/welcome-image.jpeg" :
-                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}"
+                    $"http://readersclub.runasp.net//Uploads/ChannelsImages/{s.Channel.Image}",
+                    File = string.IsNullOrEmpty(s.File) ? null :
+            $"http://readersclub.runasp.net//Uploads/pdfs/{s.File}",
+                    Audio = string.IsNullOrEmpty(s.Audio) ? null :
+            $"http://readersclub.runasp.net//Uploads/audios/{s.Audio}",
 
                 })
                  .Distinct()
@@ -85,8 +119,10 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
                     AverageRating = s.Reviews.Any() ? s.Reviews.Average(r => (float)r.Rating) : 0,
                     ChannelName = s.Channel.Name,
                     CategoryName = s.Category.Name,
-                    File = $"http://readersclub.runasp.net//Uploads/pdfs/{s.File}",
-                    Audio = $"http://readersclub.runasp.net//Uploads/audios/{s.Audio}",
+                    File = string.IsNullOrEmpty(s.File) ? null :
+            $"http://readersclub.runasp.net//Uploads/pdfs/{s.File}",
+                    Audio = string.IsNullOrEmpty(s.Audio) ? null :
+            $"http://readersclub.runasp.net//Uploads/audios/{s.Audio}",
                     Summary = s.Summary,
                     ViewsCount = s.ViewsCount,
                     LikesCount = s.LikesCount,
@@ -260,6 +296,17 @@ $"http://readersclub.runasp.net//Uploads/Covers/{s.Cover}",
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
             return true;
+        }
+        public async Task AddStoryLastPage(int userId, int storyId)
+        {
+            ReadingProgress readingProgress = new ReadingProgress()
+            {
+                UserId = userId,
+                StoryId = storyId,
+                LastPage = 1
+            };
+            _context.ReadingProgresses.Add(readingProgress);
+            await _context.SaveChangesAsync();
         }
 
     }
